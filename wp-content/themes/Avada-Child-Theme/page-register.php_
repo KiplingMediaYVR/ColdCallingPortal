@@ -1,0 +1,127 @@
+<?php
+get_header();
+?>
+<?php
+//Check whether the user is already logged in
+if ($userID) {
+    wp_redirect(home_url('/coaching'));
+} else {
+    $errors = array();
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Check username is present and not already in use
+        $username = $wpdb->escape($_REQUEST['uname']);
+        if (empty($username)) {
+            $errors['uname'] = "Please enter a username";
+        } elseif (username_exists($username)) {
+            $errors['uname'] = "This user name is already in use !!!";
+        }
+// Check email address is present and valid
+        $email = $wpdb->escape($_REQUEST['uemail']);
+        if (!is_email($email)) {
+            $errors['uemail'] = "Please enter a valid email";
+        } elseif (email_exists($email)) {
+            $errors['uemail'] = "This email address is already in use, Please login with your credentials!!!";
+        }
+        if (0 === preg_match("/.{6,}/", $_POST['pass'])) {
+            $errors['pass'] = "Password must be at least six characters";
+        }
+// Check password confirmation_matches
+        if (0 !== strcmp($_POST['pass'], $_POST['password_confirm'])) {
+            $errors['password_confirm'] = "Passwords do not match";
+        }
+		
+		if (count($errors) == 0) {
+            $password = $_POST['pass'];
+            $new_user_id = wp_create_user($username, $password, $email);
+
+            wp_redirect(home_url('/thank-you'));
+            exit;
+            $success = 1;
+// $subject = "Welcome to cold calling works";
+// $to = $email;
+// $logoUrl = get_bloginfo('stylesheet_directory') . '/images/logo.png';
+// $message = <<<EOT
+// <table>
+//     <thead>
+//         <tr>
+//             <th><img src="$logoUrl" alt="coldcallingworks" /></th>
+//         </tr>
+//     </thead>
+//     <tbody>
+//         <tr>
+//             <td>
+//                 <p>Welcome to ColdCallingWorks.</p>
+//                 <br />
+//                 <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+//                 <br />
+//             </td>
+//         </tr>
+//     </tbody>
+// </table>
+// EOT;
+// $headers = array('Content-Type: text/html; charset=UTF-8');
+// wp_mail($to, $subject, $message, $headers);
+        }
+    }
+}
+?>
+    <div id="page">
+        <section>
+            <div class="container">
+                <h2 class="title">Registration Information</h2>
+                <form id="wp_signup_form" method="post">
+                    <div class="dtc-col-wrap row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <ul class="list-form">
+                                        <li>
+                                            <label>User Name</label>
+                                            <input type="text" name="uname"/>
+                                            <span style="color: red" ;>
+                                        <?php echo $errors['uname']; ?></span>
+                                        </li>
+                                        <li>
+                                            <label>Password</label>
+                                            <input type="password" name="pass"/>
+                                            <span style="color: red" ;>
+                                        <?php echo $errors['pass']; ?></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ul class="list-form">
+                                        <li>
+                                            <label>Email Address</label>
+                                            <input type="email" name="uemail"
+                                                   value="<?php echo isset($email) ? $email : ''; ?>"/>
+                                            <span style="color: red" ;>
+                                        <?php echo $errors['uemail']; ?></span>
+                                        </li>
+                                        <li>
+                                            <label>Confirm Password</label>
+                                            <input type="password" name="password_confirm"/>
+                                            <span style="color: red" ;>
+                                        <?php echo $errors['password_confirm']; ?></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-12" style="text-align: center;">
+                                    <div class="button-set">
+                                        <div class="btn-gap">
+                                            <button id="submit" type="submit" name="submit" value="Submit"
+                                                    class="cust-btn">Sign Up
+                                            </button>
+                                        </div>
+                                        <div class="btn-gap">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+<?php get_footer(); ?>

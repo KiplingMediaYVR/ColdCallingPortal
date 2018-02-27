@@ -1,0 +1,51 @@
+/*
+Theme Name: Avada Child
+Description: Child theme for Avada theme
+Author: ThemeFusion
+Author URI: https://theme-fusion.com
+Template: Avada
+Version: 1.0.0
+Text Domain:  Avada
+*/
+.pagination-list > li a {
+    display: inherit !important;
+}
+.account_main::before{
+    z-index: auto !important;
+}
+.refferals-btn{
+    position: relative;
+}
+ul.call-list li .call-dtc {
+	min-height: 300px !important;
+}
+ul.pagination-list a span {
+	font-size: 14px;
+	margin-top: -5px !important;
+	display: inline-block;
+}
+.woocommerce-MyAccount-content, .woocommerce-content-box {
+	border: 0px !important;
+}
+.custom-login {
+	border: 1px solid;
+	padding: 10px;
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	float: left;
+}
+label {
+	display: inline-block;
+}
+.pull-left {
+	float:left;
+}
+.pull-right{
+	float:right;
+}
+.custom-login .custom-button{
+	width:100%;
+	position:relative;
+	display:inline-block;
+}
